@@ -1,0 +1,26 @@
+<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+<video id="remote" autoplay="autoplay"></video>
+<video id="local" autoplay="autoplay"></video>
+<style>
+#local, #remote{
+  width: 600px;
+}
+</style>
+<script>
+var local = document.getElementById("local");
+var remote = document.getElementById("remote");
+var peer = new Peer("roomba", {host:"duxca.com", port:9000});
+
+navigator.webkitGetUserMedia({video: true, audio: false}, function(stream) {
+  local.src = URL.createObjectURL(stream);
+  console.dir(peer);
+  peer.on('call', function(call) {
+    call.answer(stream);
+    call.on('stream', function(remoteStream) {
+      remote.src = URL.createObjectURL(remoteStream);
+    });
+  });
+}, function(err) {
+  console.error('Failed to get local stream' ,err);
+});
+</script>

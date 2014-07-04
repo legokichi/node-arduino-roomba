@@ -1,0 +1,79 @@
+<meta name="viewport" content="width=device-width user-scalable=no,initial-scale=1,maximum-scale=1">
+<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+<script src="./socket.io/socket.io.js"></script>
+<video id="remote" autoplay="autoplay"></video>
+<video id="local" autoplay="autoplay"></video>
+<input id="turnRight" type="button" value="turnRight" />
+<input id="turnLeft" type="button" value="turnLeft" />
+<input id="forward" type="button" value="forward" />
+<input id="stop" type="button" value="stop" />
+<input id="back" type="button" value="back" />
+<input id="highspeed" type="button" value="highspeed" />
+
+<style>
+#remote {
+
+}
+#local {
+  
+}
+#local, #remote{
+  width: 300px;
+}
+</style>
+<script>
+var socket = window.socket = io.connect(document.location.origin);
+var peer = window.peer = new Peer("control", {host:"duxca.com", port:9000});
+var local = document.getElementById("local");
+var remote = document.getElementById("remote");
+var turnLeft = document.getElementById("turnLeft");
+var turnRight = document.getElementById("turnRight");
+var forward = document.getElementById("forward");
+var back = document.getElementById("back");
+var stop = document.getElementById("stop");
+var highspeed = document.getElementById("highspeed");
+socket.on("connect", function(){
+  console.log("socket connect");
+  setInterval(function(){
+    socket.emit("echo", "hi");
+    console.log("sending...")
+  }, 5000);
+  socket.on("echo", function(msg){
+    console.log(msg);
+  });
+  turnLeft.addEventListener("click", function(ev){
+    console.log("turnLeft");
+    socket.emit("turnLeft");
+  });
+  turnRight.addEventListener("click", function(ev){
+    console.log("turnRight");
+    socket.emit("turnRight");
+  });
+  back.addEventListener("click", function(ev){
+    console.log("back");
+    socket.emit("back");
+  });
+  forward.addEventListener("click", function(ev){
+    console.log("forward");
+    socket.emit("forward");
+  });
+  stop.addEventListener("click", function(ev){
+    console.log("stop");
+    socket.emit("stop");
+  });
+  highspeed.addEventListener("click", function(ev){
+    console.log("highspeed");
+    socket.emit("highspeed");
+  });
+});
+
+navigator.webkitGetUserMedia({video: true, audio: false}, function(stream) {
+  local.src = URL.createObjectURL(stream);
+  var call = peer.call('roomba', stream);
+  call.on('stream', function(remoteStream) {
+    remote.src = URL.createObjectURL(remoteStream);
+  });
+}, function(err) {
+  console.error('Failed to get local stream' ,err);
+});
+</script>
