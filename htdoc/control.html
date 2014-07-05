@@ -23,7 +23,7 @@
 </style>
 <script>
 var socket = window.socket = io.connect(document.location.origin);
-var peer = window.peer = new Peer("control", {host:"duxca.com", port:9000});
+var peer = window.peer = new Peer({host:"duxca.com", port:9000});
 var local = document.getElementById("local");
 var remote = document.getElementById("remote");
 var turnLeft = document.getElementById("turnLeft");
@@ -69,7 +69,7 @@ socket.on("connect", function(){
 
 navigator.webkitGetUserMedia({video: true, audio: false}, function(stream) {
   local.src = URL.createObjectURL(stream);
-  var call = peer.call('roomba', stream);
+  var call = peer.call('roomba0', stream);
   call.on('stream', function(remoteStream) {
     remote.src = URL.createObjectURL(remoteStream);
   });

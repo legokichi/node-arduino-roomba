@@ -4,7 +4,7 @@ socket_io = require('socket.io')
 
 serialport.list (err, ports)->
   console.log("serialport list", err, ports)
-  portNum = 0
+  portNum = 3
   if ports[portNum]?
     serial = new serialport.SerialPort(ports[portNum].comName, {
       baudrate: 115200,

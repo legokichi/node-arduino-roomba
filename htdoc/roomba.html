@@ -9,7 +9,7 @@
 <script>
 var local = document.getElementById("local");
 var remote = document.getElementById("remote");
-var peer = new Peer("roomba", {host:"duxca.com", port:9000});
+var peer = new Peer("roomba0", {host:"duxca.com", port:9000});
 
 navigator.webkitGetUserMedia({video: true, audio: false}, function(stream) {
   local.src = URL.createObjectURL(stream);
